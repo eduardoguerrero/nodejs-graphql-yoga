@@ -1,0 +1,37 @@
+/*
+https://graphql-demo.mead.io/
+npm install nodemon@1.18.10 --save-dev
+npm install babel-cli@6.26.0 babel-preset-env@1.7.0
+npm start run
+*/
+
+import { GraphQLServer, PubSub } from 'graphql-yoga'
+import db from './db'
+import Query from './resolvers/Query'
+import Mutation from './resolvers/Mutation'
+import User from './resolvers/User'
+import Post from './resolvers/Post'
+import Comment from './resolvers/Comment' 
+import Subscription from './resolvers/Subscription'
+
+const pubsub = new PubSub()
+
+const server = new GraphQLServer({
+  typeDefs: './src/schema.graphql',
+  resolvers: {
+    Query,
+    Mutation,
+    User,
+    Post,
+    Comment,
+    Subscription
+  },
+  context: { 
+    db,
+    pubsub
+  }
+})
+
+server.start(() => { 
+  console.log('Server is up in port 4000!')
+})
